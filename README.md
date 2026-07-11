@@ -1,2 +1,37 @@
-# GeneScope-AI
-Explainable AI genetic disorder risk screener — Random Forest + GenAI summaries, privacy-first mobile client, offline fallback.
+# GeneScope AI — Explainable Genetic Risk Screening Platform
+
+> ⚠️ **Portfolio/demo project only.** Built using a public dataset — not real patient data.
+> This is not a certified medical device and should never be used for real diagnosis.
+
+## What This Project Does
+
+GeneScope AI predicts the risk of a genetic disorder using patient clinical data,
+and explains *why* it made that prediction — not just a number.
+
+- Predicts risk using a **Random Forest** model
+- Explains the **top reasons** behind each prediction
+- Turns the result into a **plain-language summary** using an LLM (Gemini/OpenAI)
+- Still works **offline**, using a simple rule-based fallback if there's no internet
+
+## Tech Stack
+
+| Layer | Technology |
+|---|---|
+| ML Model | scikit-learn (Random Forest) |
+| Backend | FastAPI + PostgreSQL/SQLite |
+| Mobile App | React Native (Expo) |
+| AI Summary | Gemini or OpenAI (switchable) |
+
+## Project Status
+
+✅ Phase 1 — Foundation & Planning — complete
+🚧 Phase 2 — Data & EDA — next up
+
+## Important Disclaimer
+
+This app does **not** diagnose any real medical condition. All predictions are
+for educational and portfolio purposes only, based on a public dataset.
+
+## License
+
+MIT — see `LICENSE` file.
