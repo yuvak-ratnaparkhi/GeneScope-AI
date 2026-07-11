@@ -157,6 +157,16 @@ ENV/
 env.bak/
 venv.bak/
 
+# Node / Mobile (Expo)
+node_modules/
+.expo/
+dist/
+.expo-shared/
+
+# OS
+.DS_Store
+Thumbs.db
+
 # Spyder project settings
 .spyderproject
 .spyproject
@@ -214,17 +224,3 @@ marimo/_static/
 marimo/_lsp/
 __marimo__/
 
-# Streamlit
-.streamlit/secrets.toml
-DATABASE_URL=postgresql://user:password@localhost:5432/genescope
-# or for local demo: sqlite:///./genescope.db
-
-LLM_PROVIDER=gemini
-GEMINI_API_KEY=your_key_here
-OPENAI_API_KEY=your_key_here
-
-ENVIRONMENT=development
-LOG_LEVEL=info
-ALLOWED_ORIGINS=http://localhost:19006
-
-EXPO_PUBLIC_API_BASE_URL=http://localhost:8000
