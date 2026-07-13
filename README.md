@@ -25,7 +25,9 @@ and explains *why* it made that prediction — not just a number.
 ## Project Status
 
 ✅ Phase 1 — Foundation & Planning — complete
-🚧 Phase 2 — Data & EDA — next up
+✅ Phase 2 — Data & EDA — complete
+✅ Phase 3 — Core ML Model (Random Forest) — complete (68.5% accuracy, documented leakage test)
+🚧 Phase 4 — Explainability Layer — next up
 
 ## Important Disclaimer
 
