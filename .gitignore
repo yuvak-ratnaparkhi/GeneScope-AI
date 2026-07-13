@@ -167,6 +167,9 @@ dist/
 .DS_Store
 Thumbs.db
 
+# Large model files (regenerate via training script, don't commit)
+model/registry/*.pkl
+
 # Spyder project settings
 .spyderproject
 .spyproject
