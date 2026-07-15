@@ -1,0 +1,33 @@
+{
+  "features": {
+    "Patient Age": 7,
+    "Genes in mother's side": 1,
+    "Inherited from father": 0,
+    "Maternal gene": 1,
+    "Paternal gene": 0,
+    "Blood cell count (mcL)": 4.9,
+    "Mother's age": 34,
+    "Father's age": 42,
+    "Status": 1,
+    "Respiratory Rate (breaths/min)": 1,
+    "Heart Rate (rates/min": 0,
+    "Follow-up": 1,
+    "Gender": 0,
+    "Autopsy shows birth defect (if applicable)": 1,
+    "Folic acid details (peri-conceptional)": 1,
+    "H/O serious maternal illness": 0,
+    "H/O radiation exposure (x-ray)": 1,
+    "H/O substance abuse": 0,
+    "Assisted conception IVF/ART": 1,
+    "Birth defects": 0,
+    "Blood test result": 2,
+    "Symptom 1": 1,
+    "Symptom 2": 0,
+    "Symptom 3": 1,
+    "Symptom 4": 1,
+    "Symptom 5": 0,
+    "White Blood cell count (thousand per microliter)": 7.4,
+    "Symptom_Count": 3,
+    "Parent_Age_Gap": 8
+  }
+}
