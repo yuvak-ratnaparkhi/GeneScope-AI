@@ -27,7 +27,9 @@ and explains *why* it made that prediction — not just a number.
 - ✅ Phase 1 — Foundation & Planning — complete
 - ✅ Phase 2 — Data & EDA — complete
 - ✅ Phase 3 — Core ML Model (Random Forest) — complete (68.5% accuracy, documented leakage test)
-- 🚧 Phase 4 — Explainability Layer — next up
+- ✅ Phase 4 — Explainability Layer — next up
+- ✅ Phase 5 — Backend API (FastAPI) — complete
+- 🚧 Phase 6 — Generative AI Interpretation Layer — next up
 
 ## Important Disclaimer
 
