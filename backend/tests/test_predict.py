@@ -1,3 +1,7 @@
+import warnings 
+warnings.filterwarnings("ignore", category=DeprecationWarning)
+
+
 from fastapi.testclient import TestClient
 from app.main import app
 import json
@@ -15,3 +19,5 @@ def test_predict_returns_valid_response():
     assert "predicted_disorder" in data
     assert "top_features" in data
     assert len(data["top_features"]) == 3
+    assert "summary_text" in data 
+    assert len(data["summary_text"]) > 0

@@ -7,4 +7,5 @@ class PredictRequest(BaseModel):
 class PredictResponse(BaseModel):
     predicted_disorder: str
     top_features: Dict[str, float]
+    summary_text: str
     disclaimer: str
