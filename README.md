@@ -11,14 +11,14 @@ and explains *why* it made that prediction — not just a number.
 - Predicts risk using a **Random Forest** model
 - Explains the **top reasons** behind each prediction
 - Turns the result into a **plain-language summary** using an LLM (Gemini/OpenAI)
-- Still works **offline**, using a simple rule-based fallback if there's no internet
+- Still works **offline**, showing a clear offline status instead of failing silently
 
 ## Tech Stack
 
 | Layer | Technology |
 |---|---|
 | ML Model | scikit-learn (Random Forest) |
-| Backend | FastAPI + PostgreSQL/SQLite |
+| Backend | FastAPI (stateless, no persistence layer) |
 | Mobile App | React Native (Expo) |
 | AI Summary | Gemini or OpenAI (switchable) |
 
@@ -31,6 +31,8 @@ and explains *why* it made that prediction — not just a number.
 - ✅ Phase 5 — Backend API (FastAPI) — complete
 - ✅ Phase 6 — Generative AI Interpretation Layer — complete 
 - ✅ Phase 7 — Privacy & Anonymization Layer (Client-Side) — complete
+- ✅ Phase 8 — Offline Fallback Mode (lightweight) — complete
+- ✅ Phase 9 — Mobile Frontend Integration — complete (mocked API, pending deployment)
 
 ## Important Disclaimer
 
