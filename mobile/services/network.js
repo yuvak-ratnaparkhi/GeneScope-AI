@@ -1,7 +1,11 @@
-import NetInfo from '@react-native-commnunity/netinfo';
+import NetInfo from '@react-native-community/netinfo';
 
-// Returb true if device currently has internet access
 export async function isOnline() {
+  try {
     const state = await NetInfo.fetch();
-    return state.isConnected && state.isInternetReachable != false;
+    return state.isConnected && state.isInternetReachable !== false;
+  } catch (e) {
+    console.warn('NetInfo check failed, assuming online:', e);
+    return true;
+  }
 }

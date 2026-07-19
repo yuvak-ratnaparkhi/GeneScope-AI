@@ -1,13 +1,24 @@
-import { StyleSheet, Text, View } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import FormScreen from './screens/FormScreen';
+import ResultScreen from './screens/ResultScreen';
+
+const Stack = createNativeStackNavigator();
 
 export default function App() {
   return (
-    <View style={styles.container}>
-      <Text>GeneScope AI</Text>
-    </View>
+    <NavigationContainer>
+      <Stack.Navigator initialRouteName="Form">
+        <Stack.Screen
+        name="Form"
+        component={FormScreen}
+        options={{ title: 'GeneScope AI' }}
+        />
+        <Stack.Screen
+        name="Result"
+        component={ResultScreen}
+        options={{ title: 'Your Results' }}/>
+        </Stack.Navigator>
+    </NavigationContainer>
   );
 }
-
-const styles = StyleSheet.create({
-  container: { flex: 1, alignItems: 'center', justifyContent: 'center' },
-});
