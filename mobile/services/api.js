@@ -13,18 +13,32 @@ export async function getPrediction(formData) {
     const payload = await buildAnonymizedPayload(formData, { includeHashedId: true });
 
     if (USE_MOCK) {
-        // Fake delay to simulate a real network call 
-        await new Promise((resolve) => setTimeout(resolve, 1000));
+        await new Promise((resolve) => setTimeout(resolve, 800));
+    
+        const familyPts = formData.familyHistory ? 30 : 5;
+        const lifestylePts = formData.lifestyleRisk ? 25 : 5;
+        const agePts = formData.age >= 45 ? 25 : formData.age >= 30 ? 12 : 5;
+        const basePts = 10;
+    
+        const riskScore = Math.min(97, basePts + familyPts + lifestylePts + agePts);
+    
+        const familyWeight = formData.familyHistory ? 0.34 : 0.12;
+        const lifestyleWeight = formData.lifestyleRisk ? 0.28 : 0.1;
+        const ageWeight = formData.age >= 45 ? 0.24 : formData.age >= 30 ? 0.15 : 0.08;
+        const activityWeight = Math.max(1 - (familyWeight + lifestyleWeight + ageWeight), 0.05);
+    
         return {
-            predicted_disorder: 'Type 2 Diabetes Risk',
-            top_features: {
-                family_history: 0.34,
-                bmi: 0.27,
-                age: 0.19,
-                physical_activity: 0.12,
-            },
-            summary: 
-                'Based on the screeming, you were flagged under the "Type 2 Diabetes Risk" category, mainly influenced by family history and BMI.',  
+          predicted_disorder: riskScore >= 50 ? 'Type 2 Diabetes Risk' : 'Low Metabolic Risk',
+          risk_percentage: riskScore,
+          top_features: {
+            family_history: familyWeight,
+            bmi: lifestyleWeight,
+            age: ageWeight,
+            physical_activity: activityWeight,
+          },
+          summary: `Based on the screening, your result was mainly influenced by ${
+            familyWeight > 0.2 ? 'family history' : 'lifestyle factors'
+          } and ${formData.age >= 45 ? 'your age group' : 'your BMI'}.`,
         };
     }
 

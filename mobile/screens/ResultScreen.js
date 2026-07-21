@@ -1,52 +1,76 @@
-import { StyleSheet, Text, View, ScrollView, Button } from 'react-native';
+import { ScrollView, View, Text, StyleSheet } from 'react-native';
 import * as Speech from 'expo-speech';
+import Card from '../components/Card';
+import RiskGauge from '../components/RiskGauge';
+import RiskBadge from '../components/RiskBadge';
+import FactorBar from '../components/FactorBar';
+import PrimaryButton from '../components/PrimaryButton';
+import { colors, spacing } from '../utils/theme';
 
-export default function ResultScreen({ route }) {
+export default function ResultScreen({ route, navigation }) {
   const { result } = route.params;
-  const { predicted_disorder, top_features, summary } = result;
-
-  const speakSummary = () => {
-    Speech.speak(summary);
-  };
+  const { predicted_disorder, top_features, summary, risk_percentage } = result;
 
   const sortedFeatures = Object.entries(top_features).sort((a, b) => b[1] - a[1]);
+  const riskPercentage = result.risk_percentage ?? 50;
+  const riskLevel = riskPercentage >= 65 ? 'High' : riskPercentage >= 35 ? 'Moderate' : 'Low';
+
+  const speakSummary = () => Speech.speak(summary);
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
-      <Text style={styles.title} accessibilityRole="text">{predicted_disorder}</Text>
+    <ScrollView style={styles.screen} contentContainerStyle={styles.content}>
+      <Card style={styles.heroCard}>
+        <RiskGauge percentage={riskPercentage} />
+        <Text style={styles.disorderName} accessibilityRole="text">{predicted_disorder}</Text>
+        <RiskBadge level={riskLevel} />
+      </Card>
 
-      <Text style={styles.sectionHeader}>Top Contributing Factors</Text>
-      {sortedFeatures.map(([feature, value]) => (
-        <View key={feature} style={styles.barRow}>
-          <Text style={styles.barLabel} accessibilityRole="text">{feature.replace(/_/g, ' ')}</Text>
-          <View style={styles.barTrack}>
-            <View style={[styles.barFill, { width: `${value * 100}%` }]} />
-          </View>
-          <Text style={styles.barValue}>{Math.round(value * 100)}%</Text>
-        </View>
-      ))}
+      <Card>
+        <Text style={styles.sectionTitle}>Top Contributing Factors</Text>
+        {sortedFeatures.map(([feature, value]) => (
+          <FactorBar key={feature} label={feature} value={value} />
+        ))}
+      </Card>
 
-      <Text style={styles.sectionHeader}>Summary</Text>
-      <Text style={styles.summaryText} accessibilityRole="text">{summary}</Text>
+      <Card>
+        <Text style={styles.sectionTitle}>What This Means</Text>
+        <Text style={styles.summaryText} accessibilityRole="text">{summary}</Text>
+        <View style={{ height: spacing.md }} />
+        <PrimaryButton title="Read Summary Aloud" icon="🔊" onPress={speakSummary} />
+      </Card>
 
-      <Button 
-        title="🔊 Read Summary Aloud" 
-        onPress={speakSummary} 
-        accessibilityLabel="Read summary aloud"
-        accessibilityHint="Plays the summary text using text to speech"
+      <PrimaryButton
+        title="Ask the AI Assistant"
+        icon="💬"
+        onPress={() => navigation.navigate('Chat', { context: result })}
       />
+
+      <Text style={styles.disclaimer}>
+        This is a screening estimate, not a medical diagnosis. Please consult a doctor for clinical advice.
+      </Text>
     </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { padding: 20 },
-  title: { fontSize: 22, fontWeight: 'bold', marginBottom: 16 },
-  sectionHeader: { fontSize: 16, fontWeight: '600', marginTop: 16, marginBottom: 8 },
-  barRow: { marginBottom: 10 },
-  barLabel: { fontSize: 14, marginBottom: 4, textTransform: 'capitalize' },
-  barTrack: { height: 10, backgroundColor: '#e5e7eb', borderRadius: 5, overflow: 'hidden' },
-  barFill: { height: 10, backgroundColor: '#2563eb' },
-  barValue: { fontSize: 12, color: '#555', marginTop: 2 },
-  summaryText: { fontSize: 15, lineHeight: 22, marginBottom: 20 },
+  screen: { flex: 1, backgroundColor: colors.background },
+  content: { padding: spacing.lg, paddingBottom: spacing.xl },
+  heroCard: { alignItems: 'center', paddingVertical: spacing.xl },
+  disorderName: {
+    fontSize: 20,
+    fontWeight: '800',
+    color: colors.textPrimary,
+    marginTop: spacing.md,
+    marginBottom: spacing.sm,
+    textAlign: 'center',
+  },
+  sectionTitle: { fontSize: 16, fontWeight: '700', color: colors.textPrimary, marginBottom: spacing.md },
+  summaryText: { fontSize: 15, lineHeight: 22, color: colors.textSecondary },
+  disclaimer: {
+    fontSize: 12,
+    color: colors.textSecondary,
+    textAlign: 'center',
+    marginTop: spacing.lg,
+    paddingHorizontal: spacing.md,
+  },
 });
