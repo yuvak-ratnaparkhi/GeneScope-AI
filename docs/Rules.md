@@ -1,103 +1,75 @@
 # GeneScope AI — Rules & Conventions
 
-> Status: Living document — engineering and AI-safety guardrails for the whole project
+---
+
+## Use
+
+**Backend**
+- SQLAlchemy ORM (no raw SQL)
+- Pydantic models for every request/response
+- `Depends(get_db)` for DB sessions
+- `HTTPException` for all errors
+
+**Web frontend**
+- Tailwind CSS utility classes only
+- shadcn/ui for base components
+- Lucide for icons (one icon set, project-wide)
+- Recharts for charts
+- TypeScript for all new code
+
+**Mobile (frozen)**
+- `utils/theme.js` as single source of design tokens
 
 ---
 
-## 1. What to Use
+## Avoid
 
-### Backend
-- **SQLAlchemy ORM** for all database access — never write raw SQL strings
-- **Pydantic models** for every request/response shape — no untyped dicts crossing
-  the API boundary
-- **Dependency injection** (`Depends(get_db)`) for database sessions — never open a
-  session manually inside a route
-- **HTTPException** for all error responses — never let an unhandled exception leak
-  a raw stack trace to the client
-
-### Web frontend
-- **Tailwind CSS utility classes** for styling — no inline style objects, no ad hoc CSS
-- **shadcn/ui** for base components (buttons, cards, dialogs, tabs) — customize via
-  Tailwind config, don't fork the components unless necessary
-- **Lucide** for all icons — keep one icon set project-wide, never mix icon libraries
-- **Recharts** for any chart/graph — consistent with the rest of the ecosystem
-- **TypeScript** for all new web code
-
-### Mobile frontend (frozen, maintenance only)
-- Keep using the existing pattern: `utils/theme.js` as the single source of design
-  tokens, reusable components in `components/`
+- Sending name, email, phone, or DOB to the backend — ever
+- Storing raw PII in the database — hash only
+- Hardcoded API keys or secrets — use `.env`
+- AI Assistant naming medications, dosages, or treatments
+- AI Assistant issuing a diagnosis
+- Mixing component libraries on web
+- Marking a feature "done" before it's tested end-to-end
 
 ---
 
-## 2. What to Avoid
+## Error Handling
 
-- **Never** send name, email, phone, or date of birth to the backend, in any field,
-  under any circumstance
-- **Never** store raw PII in the database — only the anonymized hash
-- **Never** hardcode API keys, database passwords, or secrets directly in source files
-  — use environment variables (`.env`, excluded via `.gitignore`)
-- **Never** let the AI Assistant name a medication, dosage, or treatment plan
-- **Never** let the AI Assistant issue a diagnosis — it explains *the existing
-  screening result*, nothing more
-- **Never** mix component libraries on the web app (e.g. don't add Material UI
-  alongside shadcn/ui) — one system, consistently applied
-- **Never** claim a feature is "done" in documentation unless it has been tested and
-  verified working end-to-end
+**Backend:** wrap route logic in `try/except` → `HTTPException(status_code, detail)`. Never leak stack traces to the client.
+
+**Frontend:** distinguish error types explicitly —
+| Type | Meaning | UI response |
+|---|---|---|
+| `OFFLINE` | No internet | Show offline banner, block submit |
+| `API_ERROR` | Request failed | Friendly retry message |
+| `HISTORY_ERROR` | History fetch failed | Empty state + retry |
+
+Always `console.error` the real error; always show the user a plain message, never a raw stack trace.
 
 ---
 
-## 3. Error Handling Conventions
+## AI Assistant — Hard Rules
 
-### Backend
-- All route logic wrapped in `try/except`, raising `HTTPException(status_code=..., detail=...)`
-- Error details should be descriptive enough to debug, but never leak internal
-  file paths or stack traces to the client in production
-
-### Frontend (mobile and web, same pattern)
-- API calls distinguish error types explicitly:
-  - `OFFLINE` — no internet connection, show offline banner, block submission
-  - `API_ERROR` — request failed, show a friendly retry message
-  - `HISTORY_ERROR` — history fetch failed, show empty state with a retry option
-- Every `catch` block logs the real error (`console.error`) for debugging, but shows
-  the user a plain-language message — never a raw error string or stack trace
+1. Never diagnose — explain the existing result only
+2. Never name medications, dosages, or treatments → redirect to a doctor
+3. One clear disclaimer sentence on clinical-adjacent answers, not a wall of text
+4. Context limited to the user's own anonymized result
+5. When uncertain, redirect to a doctor rather than guessing
 
 ---
 
-## 4. AI Assistant Boundaries (Hard Rules)
+## Privacy
 
-These are non-negotiable constraints for the chatbot's system prompt (Phase 17):
-
-1. **Never diagnose.** The assistant explains an existing screening result — it does
-   not produce new medical conclusions.
-2. **Never name medications, dosages, or treatments.** Any question in this territory
-   is redirected: *"That's a question for your doctor — I can help explain what this
-   screening found, but treatment decisions need a medical professional."*
-3. **Always include a soft disclaimer** on clinically-adjacent answers, not a wall of
-   legal text every message — one clear sentence is enough.
-4. **Context is limited to the user's own anonymized result.** The assistant never
-   references other users' data, never asks for real identity information.
-5. **When uncertain, redirect to a doctor** rather than guessing.
+- Anonymization happens client-side, before any network call
+- Only identifier: a random local device ID, immediately hashed (SHA-256)
+- No accounts, no login, no session tied to real identity
+- Profile/History screens must make "no real identity stored" clear in-context
 
 ---
 
-## 5. Privacy Rules
+## Documentation
 
-- Anonymization happens **client-side**, before any network request is constructed
-- The only persistent identifier is a random, locally-generated device ID, immediately
-  hashed (SHA-256) before ever being used — the raw ID never leaves the device
-- The backend has no concept of "user accounts" — there is no login, no password, no
-  session tied to a real identity
-- Every screen that displays personal-feeling data (Profile, History) must make clear,
-  in-context, that no real identity is stored
-
----
-
-## 6. Documentation Rules
-
-- `PHASES.md` must always reflect **actual** completed work — a phase is only marked
-  ✅ Done once it has been tested and verified, not just coded
-- `MEMORY.md` (once introduced) is updated at the end of each work session — what was
-  done, what file is in progress, what's next
-- README's Tech Stack table must always match what's actually installed and used —
-  no aspirational entries (this was previously corrected once already: removing an
-  unused PostgreSQL/SQLite dual-listing in favor of what was actually built)
+- `PHASES.md` marks a phase ✅ only once tested and verified
+- `MEMORY.md` updated each session — what was done, what's in progress, what's next
+- README Tech Stack must always match what's actually installed — no aspirational entries
