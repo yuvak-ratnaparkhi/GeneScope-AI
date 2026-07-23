@@ -36,6 +36,9 @@ and explains *why* it made that prediction — not just a number.
 - ✅ Phase 10 — Healthcare-themed UI Redesign — complete (dynamic risk scoring, reusable component library)
 - ✅ Phase 11 — Database & Persistence Layer (PostgreSQL) — complete
 
+- ✅ Phase 12 — Mobile App Shell & Navigation (Home/History/Profile tabs) — complete, mobile app frozen here
+- 🚧 Phase 13 — Web App Foundation (Next.js) — next up
+
 ## Important Disclaimer
 
 This app does **not** diagnose any real medical condition. All predictions are
