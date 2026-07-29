@@ -8,8 +8,6 @@ import { Button } from "@/components/ui/button";
 import { PredictionResult } from "@/lib/api";
 import RiskGauge from "@/components/risk-gauge";
 import { ShieldCheck, WifiOff, Download, Share2, Stethoscope } from "lucide-react";
-import jsPDF from "jspdf";
-import html2canvas from "html2canvas";
 
 export default function ResultsPage() {
     const reportRef = useRef<HTMLDivElement>(null);
@@ -41,15 +39,8 @@ export default function ResultsPage() {
 
     const sortedFeatures = Object.entries(result.top_features).sort((a, b) => b[1] - a[1]);
 
-    const handleDownloadPdf = async () => {
-        if (!reportRef.current) return;
-        const canvas = await html2canvas(reportRef.current);
-        const imgData = canvas.toDataURL("image/png");
-        const pdf = new jsPDF("p", "mm", "a4");
-        const width = pdf.internal.pageSize.getWidth();
-        const height = (canvas.height * width) / canvas.width;
-        pdf.addImage(imgData, "PNG", 0, 0, width, height);
-        pdf.save("genescope-ai-report.pdf");
+    const handleDownloadPdf = () => {
+        window.print();
     };
 
     const handleShare = async () => {
@@ -118,7 +109,7 @@ export default function ResultsPage() {
                 </div>
 
                 {/* Action Buttons */}
-                <div className="flex gap-3">
+                <div className="flex gap-3 print:hidden">
                     <Button variant="outline" className="flex-1" onClick={handleDownloadPdf}>
                         <Download size={16} className="mr-2" /> Download PDF
                     </Button>
