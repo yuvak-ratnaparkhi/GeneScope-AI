@@ -22,6 +22,9 @@
 | 10 | Healthcare-themed UI Redesign | Reusable component library (Card, RiskGauge, RiskBadge, FactorBar, PrimaryButton), dynamic mock scoring |
 | 11 | Database & Persistence Layer | PostgreSQL integrated via SQLAlchemy, predictions saved and retrievable via `/api/history/{user_hash}` |
 | 12 | Mobile App Shell & Navigation | Bottom tab navigation (Home/History/Profile), History and Profile screens — **mobile frozen here** |
+| 13 | Web App Foundation | Next.js + Tailwind + shadcn/ui setup, design system, landing page. Full product review and information architecture completed prior to build. |
+| 14 | Web Prediction Wizard | Multi-step screening form (Personal Info → Family History → Lifestyle → Review → Predict) |
+| 15 | Web Results Dashboard | Risk score, visual SHAP explainability, AI summary, confidence indicator, status badges, PDF report export, Share button, Doctor CTA |
 
 ---
 
@@ -29,7 +32,7 @@
 
 | Phase | Name | Summary |
 |---|---|---|
-| 13 | Web App Foundation | Next.js + Tailwind + shadcn/ui setup, design system, landing page. Full product review and information architecture completed prior to build. |
+| 16 | Web History & Profile | Card-based history with filtering, anonymous profile with stats |
 
 ---
 
@@ -37,9 +40,6 @@
 
 | Phase | Name | Summary |
 |---|---|---|
-| 14 | Web Prediction Wizard | Multi-step screening form (Personal Info → Family History → Lifestyle → Review → Predict) |
-| 15 | Web Results Dashboard | Risk score, visual SHAP explainability, AI summary, PDF export, "Ask AI" entry point |
-| 16 | Web History & Profile | Card-based history with filtering, anonymous profile with stats |
 | 17 | AI Health Assistant | Guardrailed chatbot (web) — explains results, redirects clinical questions to doctors |
 | 18 | Motion & Micro-interaction Polish | Skeleton loaders, page transitions, gauge fill animation, empty/error state polish |
 | 19 | Testing, Hardening, Deployment | Backend deployed (Render/Railway), web deployed (Vercel), `USE_MOCK` flipped off, end-to-end testing |
