@@ -18,9 +18,14 @@ and explains *why* it made that prediction — not just a number.
 | Layer | Technology |
 |---|---|
 | ML Model | scikit-learn (Random Forest) |
-| Backend | FastAPI (stateless, no persistence layer) |
-| Mobile App | React Native (Expo) |
-| AI Summary | Gemini or OpenAI (switchable) |
+| Explainability | SHAP (SHapley Additive exPlanations) |
+| AI Interpretation | Gemini API / OpenAI (switchable plain-language summary) |
+| Backend API | FastAPI (Python, Uvicorn) |
+| Database & ORM | PostgreSQL, SQLAlchemy |
+| Web Application | Next.js (App Router, React, TypeScript) |
+| Styling & Components | Tailwind CSS v4, shadcn/ui, Lucide Icons |
+| Mobile App | React Native (Expo) — *Frozen at Phase 12* |
+| Privacy & Client Utilities | Anonymization (`anonymize.js`), Web Share API, Native Print Engine |
 
 ## Project Status
 
