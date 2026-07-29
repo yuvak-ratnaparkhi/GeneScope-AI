@@ -37,7 +37,10 @@ and explains *why* it made that prediction — not just a number.
 - ✅ Phase 11 — Database & Persistence Layer (PostgreSQL) — complete
 
 - ✅ Phase 12 — Mobile App Shell & Navigation (Home/History/Profile tabs) — complete, mobile app frozen here
-- 🚧 Phase 13 — Web App Foundation (Next.js) — next up
+- ✅ Phase 13 — Web App Foundation (Next.js) — complete
+- ✅ Phase 14 — Web Prediction Wizard — complete
+- ✅ Phase 15 — Web Results Dashboard — complete
+- 🚧 Phase 16 — Web History & Profile — next up
 
 ## Important Disclaimer
 
