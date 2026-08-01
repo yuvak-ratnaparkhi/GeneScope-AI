@@ -45,7 +45,8 @@ and explains *why* it made that prediction — not just a number.
 - ✅ Phase 13 — Web App Foundation (Next.js) — complete
 - ✅ Phase 14 — Web Prediction Wizard — complete
 - ✅ Phase 15 — Web Results Dashboard — complete
-- 🚧 Phase 16 — Web History & Profile — next up
+- ✅ Phase 16 — Web History & Profile — complete
+- 🚧 Phase 17 — AI Health Assistant — next up
 
 ## Important Disclaimer
 
