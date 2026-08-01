@@ -49,7 +49,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
       <div className="flex-1 flex flex-col">
         <header className="h-16 border-b bg-card flex items-center justify-between px-4 gap-4">
           <Sheet>
-            <SheetTrigger className="md:hidden p-2 rounded-lg hover:bg-muted" aria-label="Open menu">
+            <SheetTrigger suppressHydrationWarning className="md:hidden p-2 rounded-lg hover:bg-muted" aria-label="Open menu">
                 <Menu size={20} />
             </SheetTrigger>
             <SheetContent side="left" className="w-60 p-0">
@@ -61,6 +61,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
           <div className="flex-1 max-w-sm hidden sm:flex items-center gap-2 px-3 py-2 rounded-lg border bg-background">
             <Search size={16} className="text-muted-foreground" />
             <Input
+              suppressHydrationWarning
               placeholder="Search history, factors..."
               className="border-0 shadow-none focus-visible:ring-0 h-auto p-0"
             />
@@ -68,11 +69,11 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
 
           <div className="flex items-center gap-3 ml-auto">
             <ThemeToggle />
-            <button className="p-2 rounded-lg hover:bg-muted relative" aria-label="Notifications">
+            <button suppressHydrationWarning className="p-2 rounded-lg hover:bg-muted relative" aria-label="Notifications">
               <Bell size={18} />
             </button>
             <DropdownMenu>
-              <DropdownMenuTrigger aria-label="Profile menu">
+              <DropdownMenuTrigger suppressHydrationWarning aria-label="Profile menu">
                 <Avatar className="h-8 w-8">
                   <AvatarFallback className="bg-primary/10 text-primary text-sm">A</AvatarFallback>
                 </Avatar>

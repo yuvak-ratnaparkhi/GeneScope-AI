@@ -35,7 +35,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning className={`${geistSans.variable} ${geistMono.variable} ...`}>
-      <body className={`${inter.variable} ${manrope.variable} font-sans antialiased`}>
+      <body suppressHydrationWarning className={`${inter.variable} ${manrope.variable} font-sans antialiased`}>
         <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
           {children}
         </ThemeProvider>
