@@ -1,12 +1,21 @@
 from fastapi import FastAPI
-from app.routers import predict, history
+from fastapi.middleware.cors import CORSMiddleware
+from app.routers import predict, history, chat
 from app.database import engine, Base
 from app import db_models
 
+
 app = FastAPI(title="GeneScope AI API")
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:3000"],
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 Base.metadata.create_all(bind=engine)
 app.include_router(predict.router)
 app.include_router(history.router)
+app.include_router(chat.router)
 
 @app.get("/")
 def root():

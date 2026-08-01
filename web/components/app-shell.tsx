@@ -12,6 +12,7 @@ import {
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Input } from "@/components/ui/input";
 import ThemeToggle from "@/components/theme-toggle";
+import { MessageCircle } from "lucide-react";
 
 const NAV_ITEMS = [
   { label: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
@@ -19,6 +20,7 @@ const NAV_ITEMS = [
   { label: "History", href: "/history", icon: History },
   { label: "Profile", href: "/profile", icon: User },
   { label: "Settings", href: "/settings", icon: Settings },
+  { label: "AI Assistant", href: "/assistant", icon: MessageCircle },
 ];
 
 function SidebarContent() {
@@ -50,7 +52,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
         <header className="h-16 border-b bg-card flex items-center justify-between px-4 gap-4">
           <Sheet>
             <SheetTrigger suppressHydrationWarning className="md:hidden p-2 rounded-lg hover:bg-muted" aria-label="Open menu">
-                <Menu size={20} />
+              <Menu size={20} />
             </SheetTrigger>
             <SheetContent side="left" className="w-60 p-0">
               <div className="p-4 font-heading font-bold text-lg text-primary">GeneScope AI</div>
