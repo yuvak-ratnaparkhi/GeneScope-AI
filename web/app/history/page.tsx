@@ -15,6 +15,7 @@ import {
 import { Checkbox } from "@/components/ui/checkbox";
 import { Search, Trash2, Eye, ArrowLeftRight } from "lucide-react";
 import { getHistory, HistoryItem } from "@/lib/api";
+import { toast } from "sonner";
 
 export default function HistoryPage() {
     const router = useRouter();
@@ -63,7 +64,12 @@ export default function HistoryPage() {
     };
 
     const handleDelete = (id: number) => {
-        setHistory((prev) => prev.filter((h) => h.id !== id));
+        setHistory((prev) => {
+            const updated = prev.filter((h) => h.id !== id);
+            localStorage.setItem("gs_history", JSON.stringify(updated));
+            return updated;
+        });
+        toast.success("Screening removed from history");
     };
 
     const handleCompare = () => {
@@ -72,10 +78,34 @@ export default function HistoryPage() {
         router.push("/history/compare");
     };
 
+    const handleExportCsv = () => {
+        const headers = "Disorder,Risk %,Date\n";
+        const rows = history.map((h) => `${h.predicted_disorder},${h.risk_percentage},${h.created_at}`).join("\n");
+        const blob = new Blob([headers + rows], { type: "text/csv" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "genescope-history.csv";
+        a.click();
+        toast.success("History exported");
+    };
+
     if (loading) {
         return (
             <AppShell>
-                <p className="text-muted-foreground">Loading history...</p>
+                <div className="max-w-3xl mx-auto space-y-3">
+                    <div className="h-8 w-32 bg-muted rounded-lg animate-pulse mb-6" />
+                    {[1, 2, 3].map((i) => (
+                        <div key={i} className="rounded-xl border bg-card p-4 flex items-center gap-4 transition-all hover:shadow-md hover:border-primary/30">
+                            <div className="w-5 h-5 rounded bg-muted animate-pulse" />
+                            <div className="flex-1 space-y-2">
+                                <div className="h-4 w-40 bg-muted rounded animate-pulse" />
+                                <div className="h-3 w-24 bg-muted rounded animate-pulse" />
+                            </div>
+                            <div className="h-4 w-20 bg-muted rounded animate-pulse" />
+                        </div>
+                    ))}
+                </div>
             </AppShell>
         );
     }
@@ -83,7 +113,12 @@ export default function HistoryPage() {
     return (
         <AppShell>
             <div className="max-w-3xl mx-auto">
-                <h1 className="text-2xl font-bold font-heading mb-6">History</h1>
+                <div className="flex items-center justify-between mb-6">
+                    <h1 className="text-2xl font-bold font-heading">History</h1>
+                    <Button variant="outline" size="sm" onClick={handleExportCsv} disabled={history.length === 0}>
+                        Export CSV
+                    </Button>
+                </div>
 
                 {history.length === 0 ? (
                     <div className="rounded-2xl border bg-card p-10 text-center">
@@ -139,7 +174,7 @@ export default function HistoryPage() {
                                 return (
                                     <div
                                         key={item.id}
-                                        className="rounded-xl border bg-card p-4 flex items-center gap-4"
+                                        className="rounded-xl border bg-card p-4 flex items-center gap-4 transition-all hover:shadow-md hover:border-primary/30"
                                     >
                                         <Checkbox
                                             checked={selected.includes(item.id)}

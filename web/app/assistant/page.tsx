@@ -9,6 +9,13 @@ import { Send } from "lucide-react";
 import { sendChatMessage } from "@/lib/api";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
+import { toast } from "sonner";
+
+const SUGGESTED_PROMPTS = [
+  "What does moderate risk mean?",
+  "How can I lower my risk?",
+  "Why is family history important?",
+];
 
 interface Message {
     role: "user" | "assistant";
@@ -53,10 +60,18 @@ export default function AssistantPage() {
         setLoading(false);
     };
 
+    const handleClearChat = () => {
+        setMessages([{ role: "assistant", text: "Hi! I can help explain your screening results. What would you like to know?" }]);
+        toast.success("Chat cleared");
+    };
+
     return (
         <AppShell>
             <div className="max-w-2xl mx-auto flex flex-col h-[calc(100vh-8rem)]">
-                <h1 className="text-2xl font-bold font-heading mb-4">AI Health Assistant</h1>
+                <div className="flex justify-between items-center mb-4">
+                    <h1 className="text-2xl font-bold font-heading">AI Health Assistant</h1>
+                    <Button variant="ghost" size="sm" onClick={handleClearChat}>Clear Chat</Button>
+                </div>
 
                 <div className="flex-1 overflow-y-auto space-y-3 pr-2 mb-4">
                     {messages.map((msg, i) => (
@@ -74,6 +89,17 @@ export default function AssistantPage() {
                     <div ref={bottomRef} />
                 </div>
 
+                <div className="flex flex-wrap gap-2 mb-3">
+                    {SUGGESTED_PROMPTS.map((prompt) => (
+                        <button
+                            key={prompt}
+                            onClick={() => setInput(prompt)}
+                            className="text-xs px-3 py-1.5 rounded-full border bg-card hover:bg-primary/5 hover:border-primary/30 transition-colors"
+                        >
+                            {prompt}
+                        </button>
+                    ))}
+                </div>
                 <div className="flex items-center gap-2 mb-2">
                     <Switch id="useContext" checked={useContext} onCheckedChange={setUseContext} />
                     <Label htmlFor="useContext" className="text-xs text-muted-foreground cursor-pointer">

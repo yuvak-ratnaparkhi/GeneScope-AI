@@ -8,6 +8,9 @@ import { Button } from "@/components/ui/button";
 import { PredictionResult } from "@/lib/api";
 import RiskGauge from "@/components/risk-gauge";
 import { ShieldCheck, WifiOff, Download, Share2, Stethoscope } from "lucide-react";
+import { toast } from "sonner";
+import { toPng } from "html-to-image";
+import jsPDF from "jspdf";
 
 export default function ResultsPage() {
     const reportRef = useRef<HTMLDivElement>(null);
@@ -26,7 +29,17 @@ export default function ResultsPage() {
     if (!result) {
         return (
             <AppShell>
-                <p className="text-muted-foreground">Loading your result...</p>
+                <div className="max-w-2xl mx-auto space-y-6">
+                    <div className="rounded-2xl border bg-card p-8 flex flex-col items-center">
+                        <div className="w-40 h-40 rounded-full bg-muted animate-pulse" />
+                        <div className="h-5 w-48 bg-muted rounded animate-pulse mt-4" />
+                    </div>
+                    <div className="rounded-2xl border bg-card p-6 space-y-3">
+                        {[1, 2, 3].map((i) => (
+                            <div key={i} className="h-3 bg-muted rounded animate-pulse" />
+                        ))}
+                    </div>
+                </div>
             </AppShell>
         );
     }
@@ -39,21 +52,33 @@ export default function ResultsPage() {
 
     const sortedFeatures = Object.entries(result.top_features).sort((a, b) => b[1] - a[1]);
 
-    const handleDownloadPdf = () => {
-        window.print();
+    const handleDownloadPdf = async () => {
+        if (!reportRef.current) return;
+        try {
+            const dataUrl = await toPng(reportRef.current, { 
+                cacheBust: true,
+                backgroundColor: "#ffffff",
+                pixelRatio: 2 // for better quality
+            });
+            const pdf = new jsPDF("p", "mm", "a4");
+            const width = pdf.internal.pageSize.getWidth();
+            const height = (reportRef.current.offsetHeight * width) / reportRef.current.offsetWidth;
+            pdf.addImage(dataUrl, "PNG", 0, 0, width, height);
+            pdf.save("genescope-ai-report.pdf");
+            toast.success("Report downloaded");
+        } catch (err) {
+            console.error("Failed to generate PDF:", err);
+            toast.error("Failed to generate PDF");
+        }
     };
 
     const handleShare = async () => {
         const shareText = `GeneScope AI Screening Result: ${result.predicted_disorder} (${result.risk_percentage}% risk). This is a screening estimate, not a diagnosis.`;
         if (navigator.share) {
-            try {
-                await navigator.share({ title: "GeneScope AI Result", text: shareText });
-            } catch (err) {
-                // Share cancelled by user
-            }
+            await navigator.share({ title: "GeneScope AI Result", text: shareText });
         } else {
             await navigator.clipboard.writeText(shareText);
-            alert("Result copied to clipboard!");
+            toast.success("Copied to clipboard");
         }
     };
 

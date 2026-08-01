@@ -11,15 +11,15 @@ export default function LandingPage() {
       </section>
 
       <section className="px-6 py-16 max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="p-6 rounded-2xl bg-card border">
+        <div className="p-6 rounded-2xl bg-card border transition-all hover:shadow-md hover:-translate-y-0.5">
           <h3 className="font-semibold font-heading">1. Answer</h3>
           <p className="text-sm text-muted-foreground mt-2">A few quick questions about your health.</p>
         </div>
-        <div className="p-6 rounded-2xl bg-card border">
+        <div className="p-6 rounded-2xl bg-card border transition-all hover:shadow-md hover:-translate-y-0.5">
           <h3 className="font-semibold font-heading">2. AI Analyzes</h3>
           <p className="text-sm text-muted-foreground mt-2">A trained model screens for risk patterns.</p>
         </div>
-        <div className="p-6 rounded-2xl bg-card border">
+        <div className="p-6 rounded-2 xl bg-card border transition-all hover:shadow-md hover:-translate-y-0.5">
           <h3 className="font-semibold font-heading">3. Understand Why</h3>
           <p className="text-sm text-muted-foreground mt-2">See exactly which factors mattered most.</p>
         </div>

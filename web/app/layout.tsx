@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { ThemeProvider } from "next-themes";
 import { Geist, Geist_Mono } from "next/font/google";
 import { Inter, Manrope } from "next/font/google";
+import { Toaster } from "@/components/ui/sonner";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -14,14 +15,15 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-const inter = Inter({ 
-  subsets: ["latin"], 
-  variable: "--font-sans" 
+const inter = Inter({
+  subsets: ["latin"],
+  variable: "--font-sans"
 });
 
-const manrope = Manrope({ 
-  subsets: ["latin"], 
-  variable: "--font-manrope" });
+const manrope = Manrope({
+  subsets: ["latin"],
+  variable: "--font-manrope"
+});
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -38,6 +40,7 @@ export default function RootLayout({
       <body suppressHydrationWarning className={`${inter.variable} ${manrope.variable} font-sans antialiased`}>
         <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
           {children}
+          <Toaster />
         </ThemeProvider>
       </body>
     </html>
