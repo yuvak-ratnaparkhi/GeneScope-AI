@@ -1,8 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { LayoutDashboard, Stethoscope, History, User, Settings, Search, Bell, Menu } from "lucide-react";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { LayoutDashboard, Stethoscope, History, User, Settings, Search, Bell, Menu, Home } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -15,6 +14,7 @@ import ThemeToggle from "@/components/theme-toggle";
 import { MessageCircle } from "lucide-react";
 
 const NAV_ITEMS = [
+  { label: "Home", href: "/", icon: Home },
   { label: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
   { label: "Screening", href: "/screening", icon: Stethoscope },
   { label: "History", href: "/history", icon: History },
@@ -44,7 +44,10 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
   return (
     <div className="min-h-screen bg-background flex">
       <aside className="hidden md:flex w-60 border-r bg-card flex-col">
-        <div className="p-4 font-heading font-bold text-lg text-primary">GeneScope AI</div>
+        <Link href="/" className="p-4 font-heading font-bold text-lg text-primary flex items-center gap-2">
+          <img src="/logo.png" alt="GeneScope AI" className="h-8 w-8 rounded-md" />
+          GeneScope AI
+        </Link>
         <SidebarContent />
       </aside>
 
@@ -55,7 +58,10 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
               <Menu size={20} />
             </SheetTrigger>
             <SheetContent side="left" className="w-60 p-0">
-              <div className="p-4 font-heading font-bold text-lg text-primary">GeneScope AI</div>
+              <Link href="/" className="p-4 font-heading font-bold text-lg text-primary flex items-center gap-2">
+                <img src="/logo.png" alt="GeneScope AI" className="h-8 w-8 rounded-md" />
+                GeneScope AI
+              </Link>
               <SidebarContent />
             </SheetContent>
           </Sheet>
@@ -80,10 +86,8 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
               </DropdownMenuContent>
             </DropdownMenu>
             <DropdownMenu>
-              <DropdownMenuTrigger suppressHydrationWarning aria-label="Profile menu">
-                <Avatar className="h-8 w-8">
-                  <AvatarFallback className="bg-primary/10 text-primary text-sm">A</AvatarFallback>
-                </Avatar>
+              <DropdownMenuTrigger suppressHydrationWarning aria-label="Profile menu" className="p-2 rounded-lg hover:bg-muted outline-none cursor-pointer">
+                <User size={18} />
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
                 <DropdownMenuItem render={<Link href="/profile">Profile</Link>} />

@@ -1,4 +1,4 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Response
 from fastapi.middleware.cors import CORSMiddleware
 from app.routers import predict, history, chat
 from app.database import engine, Base
@@ -23,6 +23,10 @@ Base.metadata.create_all(bind=engine)
 app.include_router(predict.router)
 app.include_router(history.router)
 app.include_router(chat.router)
+
+@app.get("/favicon.ico", include_in_schema=False)
+def favicon():
+    return Response(status_code=204)
 
 @app.get("/")
 def root():
