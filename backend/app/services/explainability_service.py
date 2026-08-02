@@ -37,7 +37,7 @@ def get_top_features(patient_row, top_n=3):
     importances = pd.Series(model.feature_importances_, index=model.feature_names_in_)
     top_features = importances.sort_values(ascending=False).head(top_n)
 
-    humanized = {label_map.get(k, k): v for k, v in top_features.to_dict().items()}
+    humanized = {label_map.get(k, k): float(v) for k, v in top_features.to_dict().items()}
     predicted_class = model.predict(patient_row)[0]
 
     return {

@@ -35,17 +35,6 @@ export default function DashboardPage() {
           <p className="text-muted-foreground mt-1">Here's a quick look at your health screening activity.</p>
         </div>
 
-        <div className="grid grid-cols-2 gap-4">
-          <div className="rounded-2xl border bg-card p-5 text-center">
-            <p className="text-2xl font-bold font-heading text-primary">{stats.total}</p>
-            <p className="text-xs text-muted-foreground mt-1">Total screenings</p>
-          </div>
-          <div className="rounded-2xl border bg-card p-5 text-center">
-            <p className="text-2xl font-bold font-heading text-primary">{stats.avgRisk}%</p>
-            <p className="text-xs text-muted-foreground mt-1">Average risk score</p>
-          </div>
-        </div>
-
         {!loading && recent.length > 0 && (
           <div className="rounded-2xl border bg-card p-6">
             <p className="text-sm text-muted-foreground mb-1">Most recent screening</p>

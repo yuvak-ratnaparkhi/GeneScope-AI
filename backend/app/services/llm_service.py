@@ -5,9 +5,16 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
-
 DISCLAIMER = "This is an informational estimate, not a medical diagnosis. Please consult a qualified doctor for any health concerns."
+
+def get_client() -> genai.Client | None:
+    api_key = os.getenv("GEMINI_API_KEY")
+    if not api_key:
+        return None
+    try:
+        return genai.Client(api_key=api_key)
+    except Exception:
+        return None
 
 def generate_summary(predicted_disorder: str, top_features: dict) -> str:
     features_text = ", ".join([f"{k}" for k in top_features.keys()])
@@ -27,6 +34,10 @@ Rules:
 """
 
     try:
+        client = get_client()
+        if not client:
+            raise ValueError("GEMINI_API_KEY not configured")
+
         response = client.models.generate_content(
             model="gemini-flash-latest",
             contents=prompt,
@@ -37,7 +48,6 @@ Rules:
         )
         return response.text.strip()
     except Exception as e:
-        # print("LLM ERROR:", repr(e))
         return (
             f"Based on the screening, you were flagged under the '{predicted_disorder}' "
             f"category, mainly influenced by: {features_text}. "

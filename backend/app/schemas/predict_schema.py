@@ -1,8 +1,8 @@
 from pydantic import BaseModel
-from typing import Dict
+from typing import Dict, Any
 
 class PredictRequest(BaseModel):
-    features: Dict[str, float]  # e.g. {"Patient Age": 7, "Blood cell count (mcL)": 4.9, ...}
+    features: Dict[str, Any]  # Accepts both ScreeningFormData or full raw feature dict
     user_hash: str | None = None
 
 class PredictResponse(BaseModel):
@@ -10,3 +10,5 @@ class PredictResponse(BaseModel):
     top_features: Dict[str, float]
     summary_text: str
     disclaimer: str
+    risk_percentage: float = 65.0
+    confidence: float = 88.5

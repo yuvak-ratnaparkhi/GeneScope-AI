@@ -1,5 +1,5 @@
 from google.genai import types
-from app.services.llm_service import client, DISCLAIMER
+from app.services.llm_service import get_client, DISCLAIMER
 
 SYSTEM_PROMPT = """You are the GeneScope AI Health Assistant.
 
@@ -21,6 +21,10 @@ def get_chat_reply(message: str, context: dict | None) -> str:
     full_prompt = f"{SYSTEM_PROMPT}{context_text}\n\nUser question: {message}"
 
     try:
+        client = get_client()
+        if not client:
+            raise ValueError("GEMINI_API_KEY not configured")
+
         response = client.models.generate_content(
             model="gemini-flash-latest",
             contents=full_prompt,
