@@ -47,8 +47,8 @@ and explains *why* it made that prediction — not just a number.
 - ✅ Phase 16 — Web History & Profile — complete
 - ✅ Phase 17 — AI Health Assistant — complete
 - ✅ Phase 18 — Motion & Micro-interaction Polish — complete
-- 🚧 Phase 19 — Testing, Hardening, Deployment — Pending
-- ⬜ Phase 20 — Portfolio Polish — Pending
+- ✅ Phase 19 — Testing, Hardening, Deployment — complete (backend on Render, frontend on Vercel, live end-to-end)
+- 🚧 Phase 20 — Portfolio Polish — in progress (branding/nav done, README/docs pending)
 
 ## Important Disclaimer
 
