@@ -71,9 +71,14 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
 
           <div className="flex items-center gap-3 ml-auto">
             <ThemeToggle />
-            <button suppressHydrationWarning className="p-2 rounded-lg hover:bg-muted relative" aria-label="Notifications">
-              <Bell size={18} />
-            </button>
+            <DropdownMenu>
+              <DropdownMenuTrigger suppressHydrationWarning aria-label="Notifications" className="p-2 rounded-lg hover:bg-muted relative outline-none cursor-pointer">
+                <Bell size={18} />
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="p-4 text-sm text-muted-foreground min-w-[200px] text-center">
+                No notifications yet
+              </DropdownMenuContent>
+            </DropdownMenu>
             <DropdownMenu>
               <DropdownMenuTrigger suppressHydrationWarning aria-label="Profile menu">
                 <Avatar className="h-8 w-8">
