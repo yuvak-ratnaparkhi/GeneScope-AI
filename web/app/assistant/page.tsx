@@ -4,17 +4,24 @@ import { useEffect, useRef, useState } from "react";
 import AppShell from "@/components/app-shell";
 import ChatBubble from "@/components/chat-bubble";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { Send } from "lucide-react";
+import { Button, buttonVariants } from "@/components/ui/button";
+import { Send, ChevronDown } from "lucide-react";
 import { sendChatMessage } from "@/lib/api";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { FAQ_ITEMS } from "@/lib/faq";
 
 const SUGGESTED_PROMPTS = [
-  "What does moderate risk mean?",
-  "How can I lower my risk?",
-  "Why is family history important?",
+    "What does moderate risk mean?",
+    "How can I lower my risk?",
+    "Why is family history important?",
 ];
 
 interface Message {
@@ -34,21 +41,22 @@ export default function AssistantPage() {
     const [useContext, setUseContext] = useState(true);
     const bottomRef = useRef<HTMLDivElement>(null);
 
+    const isConversationEmpty = messages.length <= 1;
+
     useEffect(() => {
         bottomRef.current?.scrollIntoView({ behavior: "smooth" });
     }, [messages]);
 
-    const handleSend = async () => {
-        if (!input.trim() || loading) return;
-        const userMessage = input.trim();
-        setMessages((prev) => [...prev, { role: "user", text: userMessage }]);
+    const submitMessage = async (text: string) => {
+        if (!text.trim() || loading) return;
+        setMessages((prev) => [...prev, { role: "user", text: text }]);
         setInput("");
         setLoading(true);
 
         try {
             const stored = sessionStorage.getItem("gs_result");
             const context = useContext && stored ? JSON.parse(stored) : undefined;
-            const reply = await sendChatMessage(userMessage, context);
+            const reply = await sendChatMessage(text, context);
             setMessages((prev) => [...prev, { role: "assistant", text: reply }]);
         } catch (err) {
             console.error("Chat error:", err);
@@ -60,9 +68,15 @@ export default function AssistantPage() {
         setLoading(false);
     };
 
+    const handleSend = () => submitMessage(input);
+
     const handleClearChat = () => {
         setMessages([{ role: "assistant", text: "Hi! I can help explain your screening results. What would you like to know?" }]);
         toast.success("Chat cleared");
+    };
+
+    const handleFaqClick = (question: string) => {
+        submitMessage(question);
     };
 
     return (
@@ -89,22 +103,30 @@ export default function AssistantPage() {
                     <div ref={bottomRef} />
                 </div>
 
-                <div className="flex flex-wrap gap-2 mb-3">
-                    {SUGGESTED_PROMPTS.map((prompt) => (
-                        <button
-                            key={prompt}
-                            onClick={() => setInput(prompt)}
-                            className="text-xs px-3 py-1.5 rounded-full border bg-card hover:bg-primary/5 hover:border-primary/30 transition-colors"
-                        >
-                            {prompt}
-                        </button>
-                    ))}
-                </div>
-                <div className="flex items-center gap-2 mb-2">
-                    <Switch id="useContext" checked={useContext} onCheckedChange={setUseContext} />
-                    <Label htmlFor="useContext" className="text-xs text-muted-foreground cursor-pointer">
-                        Reference my last screening result
-                    </Label>
+                <div className="flex items-center justify-between mb-2">
+                    <DropdownMenu>
+                        <DropdownMenuTrigger className={buttonVariants({ variant: "outline", size: "sm", className: "rounded-full bg-card cursor-pointer text-xs h-7 px-3" })}>
+                            FAQ <ChevronDown className="ml-1 h-3 w-3" />
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="start" side="top" className="w-[300px] mb-1">
+                            {[...SUGGESTED_PROMPTS.map(q => ({ question: q })), ...FAQ_ITEMS].map((item) => (
+                                <DropdownMenuItem
+                                    key={item.question}
+                                    onClick={() => handleFaqClick(item.question)}
+                                    className="cursor-pointer text-xs py-2"
+                                >
+                                    {item.question}
+                                </DropdownMenuItem>
+                            ))}
+                        </DropdownMenuContent>
+                    </DropdownMenu>
+
+                    <div className="flex items-center gap-2">
+                        <Switch id="useContext" checked={useContext} onCheckedChange={setUseContext} />
+                        <Label htmlFor="useContext" className="text-xs text-muted-foreground cursor-pointer">
+                            Reference my last screening result
+                        </Label>
+                    </div>
                 </div>
                 <div className="flex gap-2">
                     <Input
