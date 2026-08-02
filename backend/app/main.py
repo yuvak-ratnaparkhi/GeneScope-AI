@@ -8,7 +8,7 @@ from app import db_models
 app = FastAPI(title="GeneScope AI API")
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000"],
+    allow_origins=["*"],  # temporary — we'll lock this down once we have your real Vercel URL
     allow_methods=["*"],
     allow_headers=["*"],
 )
