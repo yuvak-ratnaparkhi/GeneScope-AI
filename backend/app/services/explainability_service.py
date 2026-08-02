@@ -2,7 +2,6 @@ import os
 import urllib.request
 import pandas as pd
 import joblib
-import shap
 
 MODEL_PATH = os.path.join(os.path.dirname(__file__), "..", "..", "model_v1.pkl")
 MODEL_URL = "https://github.com/yuvak-ratnaparkhi/GeneScope-AI/releases/download/v1.0-model/model_v1.pkl"
@@ -12,7 +11,6 @@ if not os.path.exists(MODEL_PATH):
     urllib.request.urlretrieve(MODEL_URL, MODEL_PATH)
 
 model = joblib.load(MODEL_PATH)
-explainer = shap.TreeExplainer(model)
 
 label_map = {
     "Symptom_Count": "Number of reported symptoms",
@@ -37,6 +35,8 @@ disorder_labels = {
 }
 
 def get_top_features(patient_row, top_n=3):
+    import shap
+    explainer = shap.TreeExplainer(model)
     shap_values = explainer.shap_values(patient_row)
     predicted_class = model.predict(patient_row)[0]
     class_index = list(model.classes_).index(predicted_class)
