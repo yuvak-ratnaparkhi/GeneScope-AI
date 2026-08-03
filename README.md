@@ -24,6 +24,20 @@ and explains *why* it made that prediction — not just a number.
 - Turns the result into a **plain-language summary** using an LLM (Gemini/OpenAI)
 - Still works **offline**, showing a clear offline status instead of failing silently
 
+## Screenshots
+
+### Landing Page
+![Landing](docs/screenshots/landing.png)
+
+### App
+| Screening | Results |
+|---|---|
+| ![Screening](docs/screenshots/screening.png) | ![Results](docs/screenshots/results.png) |
+
+| AI Assistant |
+|---|
+| ![Assistant](docs/screenshots/assistant.png) |
+
 ## Tech Stack
 
 | Category | Technologies |
@@ -50,46 +64,46 @@ Make sure you have the following installed:
 
 ### 1. Clone the Repository
 
-```bash
+\`\`\`bash
 git clone https://github.com/yuvak-ratnaparkhi/GeneScope-AI.git
 cd GeneScope-AI
-```
+\`\`\`
 
 ### 2. Set Up & Start the Backend
 
 1. Navigate to the `backend` directory:
-   ```bash
+   \`\`\`bash
    cd backend
-   ```
+   \`\`\`
 
 2. Create and activate a Python virtual environment:
    - **Windows:**
-     ```powershell
+     \`\`\`powershell
      python -m venv venv
      venv\Scripts\activate
-     ```
+     \`\`\`
    - **macOS / Linux:**
-     ```bash
+     \`\`\`bash
      python3 -m venv venv
      source venv/bin/activate
-     ```
+     \`\`\`
 
 3. Install required Python packages:
-   ```bash
+   \`\`\`bash
    pip install -r requirements.txt
-   ```
+   \`\`\`
 
 4. Configure environment variables:
    Copy the example environment file to `.env`:
-   ```bash
+   \`\`\`bash
    cp .env.example .env
-   ```
+   \`\`\`
    *(Optional: Add your `GEMINI_API_KEY` in `.env` for AI health summaries)*
 
 5. Start the FastAPI backend server:
-   ```bash
+   \`\`\`bash
    uvicorn app.main:app --reload --port 8000
-   ```
+   \`\`\`
 
    - 📍 **Backend API:** `http://localhost:8000`
    - 📖 **Interactive API Docs (Swagger):** `http://localhost:8000/docs`
@@ -99,21 +113,21 @@ cd GeneScope-AI
 ### 3. Set Up & Start the Web Frontend
 
 1. Open a new terminal window, navigate to the `web` directory, and install dependencies:
-   ```bash
+   \`\`\`bash
    cd web
    npm install
-   ```
+   \`\`\`
 
 2. Configure environment variables:
    Copy the example environment file to `.env.local`:
-   ```bash
+   \`\`\`bash
    cp .env.example .env.local
-   ```
+   \`\`\`
 
 3. Start the Next.js development server:
-   ```bash
+   \`\`\`bash
    npm run dev
-   ```
+   \`\`\`
 
    - 🌐 **Web Application:** `http://localhost:3000`
 
