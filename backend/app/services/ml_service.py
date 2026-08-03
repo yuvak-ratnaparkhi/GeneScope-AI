@@ -83,5 +83,8 @@ def process_features(raw_features: dict) -> pd.DataFrame:
 
 def predict_risk(features: dict):
     patient_df = process_features(features)
-    prediction = model.predict(patient_df)[0]
-    return disorder_labels[prediction], patient_df
+    probs = model.predict_proba(patient_df)[0]
+    pred_idx = int(probs.argmax())
+    prediction_label = disorder_labels[pred_idx]
+    pred_prob = float(probs[pred_idx])
+    return prediction_label, pred_prob, patient_df

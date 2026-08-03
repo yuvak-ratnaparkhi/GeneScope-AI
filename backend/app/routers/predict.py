@@ -12,9 +12,28 @@ router = APIRouter()
 @router.post("/api/predict", response_model=PredictResponse)
 def predict(payload: PredictRequest, db: Session = Depends(get_db)):
     try:
-        predicted_disorder, patient_df = predict_risk(payload.features)
+        predicted_disorder, pred_prob, patient_df = predict_risk(payload.features)
         explain_result = get_top_features(patient_df)
         summary = generate_summary(predicted_disorder, explain_result["top_features"])
+
+        # Calculate dynamic risk score based on model prediction probability & patient risk inputs
+        raw_risk = pred_prob * 100.0
+        risk_modifier = 0.0
+        feat = payload.features
+
+        if feat.get("familyHistory") or feat.get("Genes in mother's side") == 1:
+            risk_modifier += 16.5
+        if feat.get("lifestyleRisk") or feat.get("H/O substance abuse") == 1:
+            risk_modifier += 12.0
+        
+        patient_age = float(feat.get("Patient Age", feat.get("age", 30)) or 30)
+        if patient_age > 45:
+            risk_modifier += 9.5
+        elif patient_age < 20:
+            risk_modifier -= 5.0
+
+        risk_percentage = round(min(94.0, max(2.0, (raw_risk * 0.4) + risk_modifier)), 1)
+        confidence = round(min(96.0, max(74.0, raw_risk * 1.05)), 1)
 
         # Save this prediction to the database, tied only to the anonymized hash
         db_record = Prediction(
@@ -25,11 +44,6 @@ def predict(payload: PredictRequest, db: Session = Depends(get_db)):
         )
         db.add(db_record)
         db.commit()
-
-        top_vals = list(explain_result["top_features"].values())
-        top_impact = top_vals[0] if top_vals else 0.45
-        risk_percentage = round(min(95.0, max(15.0, top_impact * 180.0)), 1)
-        confidence = 88.5
 
         return PredictResponse(
             predicted_disorder=predicted_disorder,

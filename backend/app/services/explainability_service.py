@@ -34,10 +34,34 @@ disorder_labels = {
 }
 
 def get_top_features(patient_row, top_n=3):
-    importances = pd.Series(model.feature_importances_, index=model.feature_names_in_)
-    top_features = importances.sort_values(ascending=False).head(top_n)
+    feature_names = model.feature_names_in_
+    row = patient_row.iloc[0]
 
-    humanized = {label_map.get(k, k): float(v) for k, v in top_features.to_dict().items()}
+    dynamic_weights = {}
+    for i, col in enumerate(feature_names):
+        base_imp = float(model.feature_importances_[i])
+        val = float(row[col])
+
+        if col in ["Genes in mother's side", "Inherited from father", "Maternal gene", "Paternal gene"]:
+            factor = 2.5 if val > 0 else 0.3
+        elif col in ["Symptom_Count", "H/O substance abuse", "Symptom 1", "Symptom 2", "Symptom 3", "Symptom 4"]:
+            factor = 1.0 + (val * 0.7)
+        elif col == "Patient Age":
+            factor = 1.0 + (val / 40.0)
+        elif col == "White Blood cell count (thousand per microliter)":
+            factor = 1.6 if val > 8.0 else 0.5
+        else:
+            factor = 1.2 if val > 0 else 0.5
+
+        dynamic_weights[col] = base_imp * factor
+
+    sorted_weights = sorted(dynamic_weights.items(), key=lambda x: x[1], reverse=True)[:top_n]
+    total_top_weight = sum(v for _, v in sorted_weights) or 1.0
+
+    humanized = {
+        label_map.get(k, k): round(v / total_top_weight, 2) for k, v in sorted_weights
+    }
+
     predicted_class = model.predict(patient_row)[0]
 
     return {
