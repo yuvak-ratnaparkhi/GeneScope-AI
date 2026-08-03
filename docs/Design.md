@@ -1,97 +1,89 @@
 # GeneScope AI — Design System
 
----
-
-## Principles
-
-- Calm, not clinical-cold — never sterile hospital-white
-- Trust through clarity, not decoration
-- Explainability (SHAP) is the visual hero, not an afterthought
-- Never use alarm-style red or urgent medical iconography
+> **Status:** ✅ Production Specification — Implemented across Next.js Web App & React Native Mobile App
 
 ---
 
-## Color Palette
+## 1. Design Principles
 
-**Primary**
-| Token | Hex | Use |
+- **Calm & Trustworthy:** Healthcare-grade visual design that avoids cold hospital-white or alarmist red tones.
+- **Visual Clarity Over Decoration:** Clean typography and generous whitespace guide users through complex screening data.
+- **Explainability as the Hero:** SHAP contribution bars and interactive gauges are prominent visual focal points.
+- **Smooth Motion & Feedback:** Micro-interactions (Framer Motion) provide immediate visual feedback without distracting from clinical findings.
+
+---
+
+## 2. Color Palette & Tokens
+
+### Primary Brand Colors
+| Token | Hex / HSL | Usage |
 |---|---|---|
-| `primary` | `#0F6E56` | Buttons, active states |
-| `primary-light` | `#E1F5EE` | Backgrounds behind primary elements |
-| `accent` | `#5DCAA5` | Progress bars, highlights |
+| `primary` | `#0F6E56` | Primary action buttons, active navigation states |
+| `primary-light` | `#E1F5EE` | Subtle background badges, selected input cards |
+| `accent` | `#5DCAA5` | Progress bar indicators, interactive highlights |
 
-**Semantic**
-| Token | Hex | Use |
+### Semantic Risk Indicators
+| Risk Level | Token | Hex | Usage |
+|---|---|---|---|
+| Low Risk | `risk-low` | `#639922` | Safe status badges, positive factor indicators |
+| Moderate Risk | `risk-moderate` | `#EF9F27` | Warning indicators, moderate risk gauge bands |
+| High Risk | `risk-high` | `#D85A30` | Elevated risk alerts, top risk factor callouts |
+
+### Neutral Surface Palette
+| Token | Light Mode | Dark Mode | Usage |
+|---|---|---|---|
+| `background` | `#F4F6F5` | `#0D1117` | Main page background |
+| `surface` | `#FFFFFF` | `#161B22` | Card containers, modal sheets |
+| `border` | `#E0E0E0` | `#30363D` | Card borders, form dividers |
+| `text-primary` | `#1A1A1A` | `#F0F6FC` | Headings, primary body text |
+| `text-secondary` | `#5F5E5A` | `#8B949E` | Subtitles, helper text, captions |
+
+---
+
+## 3. Typography System
+
+| Level | Size | Weight | Line Height | Usage |
+|---|---|---|---|---|
+| **Display** | 32px / 2.25rem | 800 (ExtraBold) | 1.2 | Landing page hero header |
+| **H1** | 24px / 1.5rem | 700 (Bold) | 1.3 | Dashboard section headings |
+| **H2** | 18px / 1.125rem | 600 (SemiBold) | 1.4 | Card titles, step headers |
+| **Body** | 15px / 0.9375rem | 400–500 | 1.5 | General UI text, descriptions |
+| **Caption** | 13px / 0.8125rem | 500 (Medium) | 1.4 | Badges, timestamps, chart axes |
+
+*Typography Stack:* `Inter`, `system-ui`, `-apple-system`, `sans-serif`.
+
+---
+
+## 4. Spacing, Radius & Elevation
+
+### Spacing Scale (4px grid)
+`4px (xs) · 8px (sm) · 16px (md) · 24px (lg) · 32px (xl) · 48px (xxl) · 64px (xxxl)`
+
+### Border Radius
+| Token | Value | Applied Elements |
 |---|---|---|
-| `success` | `#639922` | Low risk |
-| `warning` | `#EF9F27` | Moderate risk |
-| `danger` | `#D85A30` | High risk, errors |
+| `radius-button` | 12px | Action buttons, input fields |
+| `radius-card` | 16px | Screening cards, result containers |
+| `radius-pill` | 999px | Risk badges, filter tags, status pills |
 
-**Neutral**
-| Token | Hex | Use |
-|---|---|---|
-| `background` | `#F4F6F5` | Page background |
-| `card` | `#FFFFFF` | Card surfaces |
-| `border` | `#E0E0E0` | Dividers, inputs |
-| `text-primary` | `#1A1A1A` | Headings, body |
-| `text-secondary` | `#5F5E5A` | Captions, supporting text |
-
-*Web: extend each token to a full 50–900 Tailwind shade scale.*
+### Shadows & Elevation
+- **Card Soft Shadow:** `0 2px 8px rgba(0, 0, 0, 0.06)`
+- **Modal Elevation:** `0 12px 32px rgba(0, 0, 0, 0.12)`
 
 ---
 
-## Typography
+## 5. UI Component Library
 
-| Role | Font |
-|---|---|
-| Headings | Manrope (or General Sans) |
-| Body / UI | Inter |
-
-| Level | Size | Weight |
-|---|---|---|
-| Display | 32px | 800 |
-| H1 | 24px | 800 |
-| H2 | 18px | 700 |
-| Body | 15px | 400–600 |
-| Caption | 13px | 500 |
+- **Component Primitives:** `shadcn/ui`, Base UI
+- **Icons:** `Lucide React`
+- **Charts & Gauges:** `Recharts` (Web), `react-native-svg` (Mobile)
+- **Animations:** `Framer Motion` (Web), `React Native Reanimated` (Mobile)
 
 ---
 
-## Spacing (4px base)
+## 6. Interactive Component Patterns
 
-`xs 4 · sm 8 · md 16 · lg 24 · xl 32 · xxl 48 · xxxl 64`
-
----
-
-## Radius & Elevation
-
-| Token | Value |
-|---|---|
-| `radius-button` | 12px |
-| `radius-card` | 16px |
-| `radius-pill` | 999px |
-| Card shadow | `0 2px 8px rgba(0,0,0,0.06)` — soft only, no harsh drop shadows |
-
----
-
-## Component Library
-
-- **Base:** shadcn/ui + Tailwind
-- **Icons:** Lucide
-- **Charts:** Recharts
-- **Animation:** Framer Motion
-
----
-
-## Illustration
-
-Minimal, geometric, single-tint (primary/accent palette). Used sparingly — empty states and landing hero only.
-
----
-
-## Component Notes
-
-- **Risk Gauge:** circular ring, color shifts by band, animated fill
-- **Risk Badge:** pill-shaped, color-coded with dot indicator
-- **Factor Bars:** horizontal, rounded, sorted by weight descending
-- **Cards:** consistent radius + shadow everywhere — the primary structural unit
+- **Risk Gauge:** Semi-circular or full-circle animated SVG ring with dynamic color transition based on prediction score.
+- **SHAP Factor Breakdown:** Horizontal bar charts sorted by feature contribution magnitude (positive vs. negative impact).
+- **AI Summary Card:** Glassmorphism card container featuring AI spark badge, structured bullet points, and disclaimer footer.
+- **AI Health Assistant Chat Interface:** Floating or full-page chat panel with streaming message animation and medical safety notices.

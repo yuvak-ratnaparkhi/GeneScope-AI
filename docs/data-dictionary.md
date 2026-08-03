@@ -1,74 +1,77 @@
-# Data Dictionary — Genetic Disorder Dataset
+# GeneScope AI — Dataset Dictionary & Preprocessing Specification
 
-Source: Public Kaggle dataset ("Genetic Disorder Classification")
-Rows: 18,000 | Columns: 33 (29 after dropping identity columns)
+> Dataset Source: Public Kaggle Dataset (*"Genetic Disorder Classification"*)  
+> Dataset Shape: 18,000 Rows | 33 Columns (29 Modeling Features after Identity Drop)
 
-## Identity Columns (dropped before modeling)
-| Column | Type | Missing % | Notes |
+---
+
+## 1. Dropped Identity Columns
+
+These columns contain synthetic PII identifiers and are completely stripped prior to model training to prevent identity leakage:
+
+| Column Name | Data Type | Missing % | Action | Rationale |
+|---|---|---|---|---|
+| `Patient Id` | `object` | 0.0% | Drop | Non-predictive unique record ID |
+| `Patient First Name` | `object` | 0.0% | Drop | Synthetic first name (PII) |
+| `Family Name` | `object` | 41.7% | Drop | Synthetic surname (PII & high missingness) |
+| `Father's name` | `object` | 0.0% | Drop | Synthetic parental name (PII) |
+
+---
+
+## 2. Demographic & Hereditary Features
+
+| Column Name | Data Type | Missing % | Preprocessing Strategy | Description |
+|---|---|---|---|---|
+| `Patient Age` | `float64` | 6.0% | Median Imputation | Patient age in years (Range 0–14) |
+| `Mother's age` | `float64` | 25.4% | Median Imputation | Mother's age at conception |
+| `Father's age` | `float64` | 25.7% | Median Imputation | Father's age at conception |
+| `Gender` | `object` | 8.7% | Mode Imputation + One-Hot | Male / Female / Ambiguous |
+| `Genes in mother's side` | `object` | 0.0% | Binary Encoding (1/0) | Maternal family genetic disorder history |
+| `Inherited from father` | `object` | 1.3% | Mode Imputation + Binary | Paternal family genetic inheritance flag |
+| `Maternal gene` | `object` | 12.2% | Mode Imputation + Binary | Specific maternal gene marker flag |
+| `Paternal gene` | `object` | 0.0% | Binary Encoding (1/0) | Specific paternal gene marker flag |
+
+---
+
+## 3. Clinical & Laboratory Measurements
+
+| Column Name | Data Type | Missing % | Preprocessing Strategy | Description |
+|---|---|---|---|---|
+| `Blood cell count (mcL)` | `float64` | 0.0% | Standard Scaling | Complete blood cell count |
+| `White Blood cell count` | `float64` | 9.1% | Median Imputation | WBC count (thousand per microliter) |
+| `Respiratory Rate` | `object` | 9.0% | Categorical Mapping | Breaths/min classification |
+| `Heart Rate` | `object` | 9.2% | Categorical Mapping | Beats/min classification |
+| `Blood test result` | `object` | 9.1% | Mode Imputation + One-Hot | Clinical blood assay result categories |
+
+---
+
+## 4. Clinical Symptoms & Medical History
+
+| Column Name | Data Type | Missing % | Preprocessing Strategy | Description |
+|---|---|---|---|---|
+| `Symptom 1` – `Symptom 5` | `object` | ~9.1% | Mode Imputation + Binary | Individual binary symptom flags |
+| `Status` | `object` | 0.0% | Binary Encoding | Patient status (Alive / Deceased) |
+| `Follow-up` | `object` | 9.4% | Mode Imputation | Clinical follow-up frequency |
+| `Birth defects` | `object` | 9.2% | Mode Imputation + Binary | Observed congenital birth defects |
+| `H/O serious maternal illness`| `object` | 8.8% | Mode Imputation + Binary | History of maternal medical illness |
+| `H/O radiation exposure` | `object` | 9.1% | Mode Imputation + One-Hot | History of maternal x-ray/radiation exposure |
+| `H/O substance abuse` | `object` | 9.6% | Mode Imputation + One-Hot | Maternal substance exposure history |
+| `Assisted conception IVF/ART` | `object` | 9.2% | Mode Imputation + Binary | History of assisted reproductive technology |
+
+---
+
+## 5. Target Classification Variables
+
+| Target Column | Type | Class Distribution | Description |
 |---|---|---|---|
-| Patient Id | object | 0% | Unique row identifier, not predictive |
-| Patient First Name | object | 0% | Fake/synthetic name, PII-style — drop |
-| Family Name | object | 41.7% | Fake/synthetic name, most missing column — drop |
-| Father's name | object | 0% | Fake/synthetic name, PII-style — drop |
+| **`Genetic Disorder`** | Categorical Target | **3 Classes** (6,000 / 6,000 / 6,000) | **Primary Target:** Mitochondrial, Single-gene, or Multifactorial genetic inheritance disorder |
+| `Disorder Subclass` | Categorical Sub-target | 9 Imbalanced Classes | Secondary subclass categorization |
 
-## Demographic & Family History
-| Column | Type | Missing % | Notes |
-|---|---|---|---|
-| Patient Age | float64 | 6.0% | Range 0–14, needs imputation (mean/median) |
-| Mother's age | float64 | 25.4% | Needs imputation |
-| Father's age | float64 | 25.7% | Needs imputation |
-| Gender | object | 8.7% | 3 categories, needs imputation (mode) |
-| Genes in mother's side | object | 0% | 2 categories (Yes/No) |
-| Inherited from father | object | 1.3% | 2 categories |
-| Maternal gene | object | 12.2% | 2 categories, needs imputation |
-| Paternal gene | object | 0% | 2 categories |
+---
 
-## Clinical Measurements
-| Column | Type | Missing % | Notes |
-|---|---|---|---|
-| Blood cell count (mcL) | float64 | 0% | Clean, no missing values |
-| White Blood cell count (thousand per microliter) | float64 | 9.1% | Needs imputation |
-| Respiratory Rate (breaths/min) | object | 9.0% | Categorical-coded, 2 values |
-| Heart Rate (rates/min) | object | 9.2% | Categorical-coded, 2 values |
-| Blood test result | object | 9.1% | 4 categories |
+## 6. Preprocessing & Data Cleaning Protocol
 
-## Symptoms
-| Column | Type | Missing % | Notes |
-|---|---|---|---|
-| Symptom 1 | object | 9.1% | Binary flag |
-| Symptom 2 | object | 9.0% | Binary flag |
-| Symptom 3 | object | 9.0% | Binary flag |
-| Symptom 4 | object | 8.9% | Binary flag |
-| Symptom 5 | object | 9.4% | Binary flag |
-
-## Pregnancy & Birth History
-| Column | Type | Missing % | Notes |
-|---|---|---|---|
-| Status | object | 0% | Alive/Deceased |
-| Follow-up | object | 9.4% | 2 categories |
-| Autopsy shows birth defect (if applicable) | object | 19.7% | 3 categories |
-| Folic acid details (peri-conceptional) | object | 9.2% | 2 categories |
-| H/O serious maternal illness | object | 8.8% | 2 categories |
-| H/O radiation exposure (x-ray) | object | 9.1% | 4 categories |
-| H/O substance abuse | object | 9.6% | 4 categories |
-| Assisted conception IVF/ART | object | 9.2% | 2 categories |
-| Birth defects | object | 9.2% | 2 categories |
-
-## Targets
-| Column | Type | Missing % | Notes |
-|---|---|---|---|
-| Genetic Disorder | object | 0% | **Main target.** 3 classes, perfectly balanced (6000/6000/6000) |
-| Disorder Subclass | object | 9.4% | **Sub-target.** 9 classes, imbalanced (264–4780 range) |
-
-## Cleaning Plan (Phase 2)
-- Drop the 4 identity columns before modeling
-- Impute numeric columns with mean/median
-- Impute categorical columns with mode
-- Handle `Disorder Subclass` imbalance only if modeling at that level (class weighting or SMOTE)
-
-## Note on Duplicates
-4,015 rows (22%) share identical feature values after dropping identity columns.
-Dropping them would break target balance — "Multifactorial genetic inheritance
-disorders" would fall from 6,000 to 1,985 rows while the other two classes stay
-at 6,000. This isn't duplicate patients, just shared clinical feature combinations
-(common with many binary columns). Decision: keep as-is to preserve class balance.
+1. **Identity Removal:** Strip `Patient Id`, `Patient First Name`, `Family Name`, and `Father's name`.
+2. **Missing Value Imputation:** Numerical features imputed via median; categorical features imputed via mode.
+3. **Encoding:** Binary flags mapped to `0/1`; multi-class categoricals one-hot encoded.
+4. **Duplicate Handling Analysis:** 4,015 rows (22%) share identical feature vectors due to coarse binary symptom encoding. Dropping these rows disproportionately shrinks *Multifactorial genetic inheritance disorders* from 6,000 to 1,985 records, destroying dataset balance. **Decision:** Retain rows to preserve class balance for Random Forest training.

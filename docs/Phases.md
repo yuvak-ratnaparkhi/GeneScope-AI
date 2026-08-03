@@ -1,61 +1,41 @@
-# GeneScope AI — Project Phases
+# GeneScope AI — Project Roadmap & Completed Phases
 
-> Status: Living document — updated as each phase is completed and verified
+> **Status:** ✅ Complete — All 20 Development Phases Finished & Production Deployed
 
-**Legend:** ✅ Done &nbsp;|&nbsp; 🚧 In Progress &nbsp;|&nbsp; ⬜ Planned
-
----
-
-## Completed Phases
-
-| Phase | Name | Summary |
-|---|---|---|
-| 1 | Foundation & Planning | Project scope, dataset selection, initial planning |
-| 2 | Data & EDA | Exploratory data analysis on the public genetic disorder dataset |
-| 3 | Core ML Model | Random Forest classifier trained and evaluated (68.5% accuracy, documented leakage test) |
-| 4 | Explainability Layer | SHAP integrated to extract top contributing features per prediction |
-| 5 | Backend API | FastAPI backend built — `/api/predict` endpoint, request/response schemas |
-| 6 | Generative AI Interpretation Layer | Gemini/OpenAI integration — converts prediction + SHAP output into a plain-language summary |
-| 7 | Privacy & Anonymization Layer (Client-Side) | `anonymize.js` — strips PII, hashes identifiers client-side before any network call |
-| 8 | Offline Fallback Mode | Lightweight version — network detection + offline banner, blocks submission when offline |
-| 9 | Mobile Frontend Integration | Form and Result screens, navigation, TTS, accessibility labels (mocked API) |
-| 10 | Healthcare-themed UI Redesign | Reusable component library (Card, RiskGauge, RiskBadge, FactorBar, PrimaryButton), dynamic mock scoring |
-| 11 | Database & Persistence Layer | PostgreSQL integrated via SQLAlchemy, predictions saved and retrievable via `/api/history/{user_hash}` |
-| 12 | Mobile App Shell & Navigation | Bottom tab navigation (Home/History/Profile), History and Profile screens — **mobile frozen here** |
-| 13 | Web App Foundation | Next.js + Tailwind + shadcn/ui setup, design system, landing page. Full product review and information architecture completed prior to build. |
-| 14 | Web Prediction Wizard | Multi-step screening form (Personal Info → Family History → Lifestyle → Review → Predict) |
-| 15 | Web Results Dashboard | Risk score, visual SHAP explainability, AI summary, confidence indicator, status badges, PDF report export, Share button, Doctor CTA |
+**Legend:** ✅ Complete
 
 ---
 
-## Current Phase
+## Completed Phases (Phases 1–20)
 
-| Phase | Name | Summary |
-|---|---|---|
-| 16 | Web History & Profile | Card-based history with filtering, anonymous profile with stats |
-
----
-
-## Planned Phases
-
-| Phase | Name | Summary |
-|---|---|---|
-| 17 | AI Health Assistant | Guardrailed chatbot (web) — explains results, redirects clinical questions to doctors |
-| 18 | Motion & Micro-interaction Polish | Skeleton loaders, page transitions, gauge fill animation, empty/error state polish |
-| 19 | Testing, Hardening, Deployment | Backend deployed (Render/Railway), web deployed (Vercel), `USE_MOCK` flipped off, end-to-end testing |
-| 20 | Portfolio Polish | README overhaul, demo video, recruiter-facing summary, final cleanup |
+| Phase | Name | Summary | Status |
+|---|---|---|---|
+| 1 | Foundation & Planning | Project scope, dataset selection, initial architecture, and planning | ✅ Complete |
+| 2 | Data & EDA | Exploratory data analysis on the public genetic disorder dataset | ✅ Complete |
+| 3 | Core ML Model | Random Forest classifier trained & evaluated (68.5% accuracy, documented leakage test) | ✅ Complete |
+| 4 | Explainability Layer | SHAP integrated to extract top contributing features per prediction | ✅ Complete |
+| 5 | Backend API | FastAPI backend built — `/api/predict` endpoint, Pydantic schemas, Uvicorn server | ✅ Complete |
+| 6 | Generative AI Interpretation | Gemini 2.5 Flash / OpenAI integration — converts prediction + SHAP output into plain-language summary | ✅ Complete |
+| 7 | Privacy & Anonymization Layer | `anonymize.js` — strips PII, hashes identifiers client-side via SHA-256 before any network call | ✅ Complete |
+| 8 | Offline Fallback Mode | Lightweight version — network detection + offline banner, blocks submission when offline | ✅ Complete |
+| 9 | Mobile Frontend Integration | Form and Result screens, navigation, TTS, accessibility labels (mocked API) | ✅ Complete |
+| 10 | Healthcare-themed UI Redesign | Reusable component library (Card, RiskGauge, RiskBadge, FactorBar, PrimaryButton), dynamic scoring | ✅ Complete |
+| 11 | Database & Persistence Layer | PostgreSQL integrated via SQLAlchemy, predictions saved and retrievable via `/api/history/{user_hash}` | ✅ Complete |
+| 12 | Mobile App Shell & Navigation | Bottom tab navigation (Home/History/Profile), History and Profile screens — **Mobile app frozen here** | ✅ Complete (Frozen) |
+| 13 | Web App Foundation | Next.js 16 (App Router), Tailwind CSS v4, shadcn/ui setup, design system tokens & landing page | ✅ Complete |
+| 14 | Web Prediction Wizard | Multi-step interactive screening form (Personal Info → Family History → Lifestyle → Review → Predict) | ✅ Complete |
+| 15 | Web Results Dashboard | Risk gauge, Recharts SHAP visualization, AI summary, confidence indicator, PDF report export, Share API | ✅ Complete |
+| 16 | Web History & Profile | Card-based history with filtering, anonymous profile manager with screening stats | ✅ Complete |
+| 17 | AI Health Assistant | Guardrailed chatbot (web) — explains results, redirects clinical questions to doctors | ✅ Complete |
+| 18 | Motion & Micro-interaction Polish | Skeleton loaders, Framer Motion page transitions, animated risk gauge, empty/error state polish | ✅ Complete |
+| 19 | Testing, Hardening, Deployment | Backend deployed on Render (FastAPI + PostgreSQL), Web deployed on Vercel, end-to-end testing | ✅ Complete |
+| 20 | Portfolio Polish & Finalizing | README overhaul, live deployment links, screenshots, recruiter-facing summary, docs finalized | ✅ Complete |
 
 ---
 
 ## Notes on Scope Decisions
 
-- The mobile app (React Native/Expo) is **intentionally frozen** at Phase 12. It remains
-  a complete, working, demonstrable product on its own — further mobile-specific
-  feature work was deliberately paused in favor of the web app, to keep the project
-  scope realistic given time constraints.
-- A prior plan to add a rule-based offline scoring engine (Phase 8) was deliberately
-  simplified to a lightweight "offline banner + blocked submission" approach, to avoid
-  maintaining two divergent scoring systems.
-- User profiles/history and document-upload (OCR) features were considered and
-  intentionally scoped out of the active build — documented here as acknowledged
-  future roadmap items rather than built features.
+- **Mobile App Status (Phase 12):** The React Native (Expo) mobile app was intentionally frozen at Phase 12 as a complete, working prototype. Active feature development shifted to Next.js for web production deployment.
+- **Offline Strategy:** Offline resilience was implemented via lightweight client-side network detection and form submission blocking rather than maintaining twin offline scoring models.
+- **Privacy Architecture:** Patient identity is anonymized on the client side prior to network calls, ensuring zero raw PII is logged or stored in PostgreSQL.
+- **Production Deployments:** Web application deployed on Vercel (`gene-scope-ai-chi.vercel.app`), backend and database deployed on Render (`genescope-backend.onrender.com`).
