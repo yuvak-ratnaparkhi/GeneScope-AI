@@ -7,9 +7,10 @@ export function calculateBmi(heightCm: string, weightKg: string): string {
     return bmi.toFixed(1);
 }
 
-export function bmiCategory(bmi: number): string {
-    if (bmi < 18.5) return "Underweight";
-    if (bmi < 25) return "Normal";
-    if (bmi < 30) return "Overweight";
-    return "Obese";
+export function bmiCategory(bmi: number, age?: number): string {
+  if (age && age < 18) return "Category not standard for under-18 (uses growth percentiles, not adult BMI)";
+  if (bmi < 18.5) return "Underweight";
+  if (bmi < 25) return "Normal";
+  if (bmi < 30) return "Overweight";
+  return "Obese";
 }

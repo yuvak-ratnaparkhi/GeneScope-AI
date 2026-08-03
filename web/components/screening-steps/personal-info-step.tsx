@@ -21,7 +21,7 @@ export default function PersonalInfoStep({
     onChange: (fields: Partial<ScreeningFormData>) => void;
 }) {
     return (
-        <div className="space-y-5">
+        <div className="space-y-5" suppressHydrationWarning>
             <div>
                 <Label htmlFor="age">Age</Label>
                 <Input
@@ -97,7 +97,7 @@ export default function PersonalInfoStep({
                 />
                 {data.bmi && (
                     <p className="text-xs text-muted-foreground mt-1.5">
-                        Category: <span className="font-medium">{bmiCategory(Number(data.bmi))}</span>
+                        Category: <span className="font-medium">{bmiCategory(Number(data.bmi), Number(data.age))}</span>
                     </p>
                 )}
             </div>

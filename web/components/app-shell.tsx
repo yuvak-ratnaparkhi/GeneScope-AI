@@ -45,7 +45,8 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
     <div className="min-h-screen bg-background flex">
       <aside className="hidden md:flex w-60 border-r bg-card flex-col">
         <Link href="/" className="p-4 font-heading font-bold text-lg text-primary flex items-center gap-2">
-          <img src="/logo.png" alt="GeneScope AI" className="h-8 w-8 rounded-md" />
+          <img src="/logo-light.svg" className="h-8 w-8 block dark:hidden rounded-md" alt="GeneScope AI" />
+          <img src="/logo-dark.svg" className="h-8 w-8 hidden dark:block rounded-md" alt="GeneScope AI" />
           GeneScope AI
         </Link>
         <SidebarContent />

@@ -33,8 +33,8 @@ export default function SettingsPage() {
                 <div className="rounded-2xl border bg-card p-5">
                     <Label>Clear local session data</Label>
                     <p className="text-xs text-muted-foreground mt-1 mb-3">
-                        Removes any temporary screening data stored in this browser session. Your history in the
-                        database (if connected) is not affected.
+                        Removes any temporary screening data stored in this browser session. Your saved screening
+                        history in the database is not affected.
                     </p>
                     {!confirming ? (
                         <Button variant="outline" size="sm" onClick={() => setConfirming(true)}>

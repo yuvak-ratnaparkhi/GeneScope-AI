@@ -1,24 +1,33 @@
 import Link from "next/link";
 import Footer from "@/components/footer";
+import ThemeToggle from "@/components/theme-toggle";
 
 export default function LandingPage() {
   return (
     <div className="min-h-screen bg-background flex flex-col">
       <header className="h-16 border-b bg-card flex items-center justify-between px-6">
         <Link href="/" className="font-heading font-bold text-lg text-primary flex items-center gap-2">
-          <img src="/logo.png" alt="GeneScope AI" className="h-8 w-8 rounded-md" />
+          <img src="/logo-light.svg" className="h-8 w-8 block dark:hidden rounded-md" alt="GeneScope AI" />
+          <img src="/logo-dark.svg" className="h-8 w-8 hidden dark:block rounded-md" alt="GeneScope AI" />
           GeneScope AI
         </Link>
-        <Link
-          href="/screening"
-          className="inline-flex items-center justify-center rounded-lg bg-primary text-primary-foreground px-4 py-2 text-sm font-medium hover:bg-primary/90 transition-colors"
-        >
-          Get Started &rarr;
-        </Link>
+        <div className="flex items-center gap-3">
+          <ThemeToggle />
+          <Link
+            href="/screening"
+            className="inline-flex items-center justify-center rounded-lg bg-primary text-primary-foreground px-4 py-2 text-sm font-medium hover:bg-primary/90 transition-colors"
+          >
+            Get Started &rarr;
+          </Link>
+        </div>
       </header>
 
       <main className="flex-1">
         <section className="px-6 py-20 text-center max-w-3xl mx-auto">
+          <div className="flex justify-center mb-6">
+            <img src="/logo-light.svg" className="block dark:hidden h-10" alt="GeneScope AI" />
+            <img src="/logo-dark.svg" className="hidden dark:block h-10" alt="GeneScope AI" />
+          </div>
           <h1 className="text-4xl font-bold font-heading text-foreground">
             Understand your genetic risk, explained clearly
           </h1>

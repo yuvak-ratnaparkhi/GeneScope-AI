@@ -25,6 +25,42 @@ export interface PredictionResult {
     confidence: number;
 }
 
+function mapToModelFeatures(formData: ScreeningFormData) {
+  const age = Number(formData.age) || 30;
+  const bmi = Number(formData.bmi) || 22;
+  return {
+    "Patient Age": age,
+    "Genes in mother's side": formData.familyHistory ? 1 : 0,
+    "Inherited from father": formData.familyHistory ? 1 : 0,
+    "Maternal gene": formData.familyHistory ? 1 : 0,
+    "Paternal gene": 0,
+    "Blood cell count (mcL)": 4.5,
+    "Mother's age": age + 28,
+    "Father's age": age + 30,
+    "Status": 1,
+    "Respiratory Rate (breaths/min)": formData.lifestyleRisk ? 22 : 16,
+    "Heart Rate (rates/min": formData.lifestyleRisk ? 95 : 72,
+    "Follow-up": 1,
+    "Gender": formData.gender === "male" ? 1 : formData.gender === "female" ? 0 : 2,
+    "Autopsy shows birth defect (if applicable)": 0,
+    "Folic acid details (peri-conceptional)": 1,
+    "H/O serious maternal illness": 0,
+    "H/O radiation exposure (x-ray)": 0,
+    "H/O substance abuse": formData.lifestyleRisk ? 1 : 0,
+    "Assisted conception IVF/ART": 0,
+    "Birth defects": 0,
+    "White Blood cell count (thousand per microliter)": bmi > 25 ? 9.5 : 7,
+    "Blood test result": 1,
+    "Symptom 1": formData.lifestyleRisk ? 1 : 0,
+    "Symptom 2": formData.familyHistory ? 1 : 0,
+    "Symptom 3": bmi > 25 ? 1 : 0,
+    "Symptom 4": age > 45 ? 1 : 0,
+    "Symptom 5": 0,
+    "Symptom_Count": (formData.lifestyleRisk ? 1 : 0) + (formData.familyHistory ? 1 : 0),
+    "Parent_Age_Gap": 5,
+  };
+}
+
 export async function getPrediction(formData: ScreeningFormData): Promise<PredictionResult> {
     if (USE_MOCK) {
         // ...(keep all existing mock code exactly as-is, unchanged)...
@@ -33,7 +69,7 @@ export async function getPrediction(formData: ScreeningFormData): Promise<Predic
     const response = await fetch(`${API_BASE_URL}/api/predict`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ features: formData }),
+        body: JSON.stringify({ features: mapToModelFeatures(formData), user_hash: undefined }),
     });
 
     if (!response.ok) {
@@ -44,7 +80,7 @@ export async function getPrediction(formData: ScreeningFormData): Promise<Predic
     const data = await response.json();
 
     const topVals = Object.values(data.top_features || {}) as number[];
-    const calculatedRisk = data.risk_percentage ?? Math.min(95, Math.max(15, Math.round((topVals[0] || 0.45) * 100)));
+    const calculatedRisk = data.risk_percentage ?? Math.min(95, Math.max(2, Math.round((topVals[0] || 0.1) * 100)));
 
     const result: PredictionResult = {
         predicted_disorder: data.predicted_disorder,
